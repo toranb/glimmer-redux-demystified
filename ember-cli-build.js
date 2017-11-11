@@ -1,10 +1,17 @@
 'use strict';
 
+const replace = require('rollup-plugin-replace');
 const GlimmerApp = require('@glimmer/application-pipeline').GlimmerApp;
 
 module.exports = function(defaults) {
   let app = new GlimmerApp(defaults, {
-    // Add options here
+    rollup: {
+      plugins: [
+        replace({
+          "process.env.NODE_ENV": JSON.stringify(process.env.EMBER_ENV)
+        })
+      ]
+    }
   });
 
   return app.toTree();
