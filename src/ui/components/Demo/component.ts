@@ -10,17 +10,22 @@ const reducers = (state, action) => {
 const store = createStore(reducers);
 
 export default class Demo extends Component {
-  @tracked _num: number;
-  @tracked('_num')
-  get num() {
-    return store.getState();
-  }
 
   constructor(args) {
     store.subscribe(() => {
-      this._num = store.getState();
+      this.num = store.getState();
     });
     super(args);
+
+    const descriptor = tracked(this, 'num', {
+      enumerable: true,
+      configurable: false,
+      set() {},
+      get() {
+        return store.getState();
+      }
+    });
+    Object.defineProperty(this, 'num', descriptor);
   }
 
   add() {
